@@ -8,6 +8,7 @@ import { useWallet, useConnection } from '@solana/wallet-adapter-react';
 // Components
 import { RequestAirdrop } from '../../components/RequestAirdrop';
 import { GenerateSolPay } from '../../components/generateSolPay';
+//import { GenerateCrossMint } from '../../components/generateSolPay';
 import pkg from '../../../package.json';
 
 
@@ -47,6 +48,7 @@ export const HomeView: FC = ({ }) => {
         
           <div className="text-center">
           <GenerateSolPay/>
+          
           
 
           
