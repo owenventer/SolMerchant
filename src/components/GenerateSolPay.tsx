@@ -104,12 +104,14 @@ export const GenerateSolPay: FC = () => {
         const [checkMark,setCheckMark]=useState();
         const [isDone,setIsDone]=useState(false)
         const [solPayPicked,setSPP]=useState(false);
+        const [mintReceiptClicked,setMintReceiptClicked]=useState(false);
 
 
         // const changeURL = (inURL) => {
         //     setURL(inURL);
         //   };
     async function generateQR(){
+        setMintReceiptClicked(false);
         setIsDone(false);
         setSPP(true);
         const recipient =wallet.publicKey;
@@ -130,6 +132,7 @@ export const GenerateSolPay: FC = () => {
     }
     
     async function mintReceipt(){
+            setMintReceiptClicked(true);
             //DATE INFO 
             
                 var date = new Date().getDate(); //Current Date
@@ -226,6 +229,12 @@ export const GenerateSolPay: FC = () => {
                     <button  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => {mintReceipt()}}  
                     disabled={!wallet}>
                         Mint receipt</button>
+                    {mintReceiptClicked
+                    ?<h4 className="md:w-full text-center text-slate-300 my-2">
+                    <p>Minted NFT Receipt! Check your wallet.</p>
+                  </h4>
+                    :<p></p>
+                    }
                 </div>
                 :<p></p>
                 
