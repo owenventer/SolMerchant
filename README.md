@@ -8,4 +8,4 @@ Live demo at: https://solmerchant.vercel.app/
 
 Built on top of the Solana-dapp scaffold from the Solana Foundation. 
 
-# This was built for the Solana Sandstorm Hackathon 
+## This was built for the Solana Sandstorm Hackathon 
