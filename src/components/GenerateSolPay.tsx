@@ -10,7 +10,7 @@ async function validatePayment(reference,paymentStatus,recipient,amount,url){
 
     const connection = new Connection(
         //clusterApiUrl('mainnet-beta'),
-        "https://attentive-alien-tent.solana-mainnet.quiknode.pro/bf3abe3e4915fb97257ff5471675433dbedaa920/",
+        process.env.NEXT_PUBLIC_RPC,
         'confirmed',
       );
       
@@ -82,7 +82,7 @@ async function validatePayment(reference,paymentStatus,recipient,amount,url){
 export const GenerateSolPay: FC = () => {
     const connection = new Connection(
         //clusterApiUrl('mainnet-beta'),
-        "https://attentive-alien-tent.solana-mainnet.quiknode.pro/bf3abe3e4915fb97257ff5471675433dbedaa920/",
+        process.env.NEXT_PUBLIC_RPC,
         'confirmed',
       );
     //const { publicKey } = useWallet();
@@ -142,8 +142,8 @@ export const GenerateSolPay: FC = () => {
 
             //MINT INFO
             const reqHeader = new Headers();
-            reqHeader.append("x-client-secret", "sk_live.usVQ6eZT.OzoRV8Wl0NEBDWKk6FS6fAk69YJTgwLs");
-            reqHeader.append("x-project-id", "4b9b60b4-3958-4b21-a818-e4fa2e164f68");
+            reqHeader.append("x-client-secret", process.env.NEXT_PUBLIC_CMCSK);
+            reqHeader.append("x-project-id", process.env.NEXT_PUBLIC_CMPID);
             reqHeader.append("Content-Type", "application/json");
 
             const collectionName = "default-solana" // change if you've created a collection
