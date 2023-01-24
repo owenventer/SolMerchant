@@ -172,7 +172,7 @@ export const GenerateSolPay: FC = () => {
             method: 'POST',
             headers: reqHeader,
             body: reqBody,
-            redirect: 'follow'
+            //redirect: 'follow'
             };
 
             fetch(`https://www.crossmint.com/api/2022-06-09/collections/${collectionName}/nfts`, requestOptions)
