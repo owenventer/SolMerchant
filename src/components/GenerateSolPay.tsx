@@ -6,15 +6,17 @@ import QRCode from "react-qr-code";
 import BigNumber from 'bignumber.js';
 import { encodeURL, createQR, findReference, FindReferenceError, validateTransfer } from '@solana/pay';
 
-async function validatePayment(reference,paymentStatus,recipient,amount){
+async function validatePayment(reference,paymentStatus,recipient,amount,url){
 
     const connection = new Connection(
-        clusterApiUrl('mainnet-beta'),
+        //clusterApiUrl('mainnet-beta'),
+        "https://attentive-alien-tent.solana-mainnet.quiknode.pro/bf3abe3e4915fb97257ff5471675433dbedaa920/",
         'confirmed',
       );
       
     console.log('5. Find the transaction');
-    console.log("INFO coming in: "+connection+" "+reference+" "+paymentStatus+" "+recipient+" "+amount);
+    //console.log("INFO coming in: "+connection+" "+reference+" "+paymentStatus+" "+recipient+" "+amount);
+    console.log("URL coming in: "+url);
     let signatureInfo;
    
     const { signature } = await new Promise((resolve, reject) => {
@@ -33,7 +35,7 @@ async function validatePayment(reference,paymentStatus,recipient,amount){
             console.count('Checking for transaction...'+reference);
             try {
                 signatureInfo = await findReference(connection, reference, { finality: 'confirmed' });
-                console.log('\n 🖌  Signature found: ', signatureInfo.signature);
+                console.log('\n 🖌  Signature found: ', signatureInfo.signature,signatureInfo);
                 clearInterval(interval);
                 resolve(signatureInfo);
             } catch (error: any) {
@@ -79,7 +81,8 @@ async function validatePayment(reference,paymentStatus,recipient,amount){
 
 export const GenerateSolPay: FC = () => {
     const connection = new Connection(
-        clusterApiUrl('mainnet-beta'),
+        //clusterApiUrl('mainnet-beta'),
+        "https://attentive-alien-tent.solana-mainnet.quiknode.pro/bf3abe3e4915fb97257ff5471675433dbedaa920/",
         'confirmed',
       );
     //const { publicKey } = useWallet();
@@ -88,7 +91,7 @@ export const GenerateSolPay: FC = () => {
     
     //Standard vars
         const wallet=useWallet();
-        const recipient = wallet.publicKey
+        const recipient =new PublicKey("9AihNo84zvCbJNPH6aceCa3SuGDCJZrRuJ3XR1SypZ5n");
         //let amount = new BigNumber(0.1);
         
         const [reference,setReference] = useState(new Keypair().publicKey);
@@ -102,12 +105,14 @@ export const GenerateSolPay: FC = () => {
         const [isDone,setIsDone]=useState(false)
         const [solPayPicked,setSPP]=useState(false);
 
+
         // const changeURL = (inURL) => {
         //     setURL(inURL);
         //   };
     async function generateQR(){
         setIsDone(false);
         setSPP(true);
+        const recipient =wallet.publicKey;
         //const qrValue="solana:"+publicKey+"?amount="+amount1+"&&label=SnapSol+Payment"
         console.log('2. 🛍 Simulate a customer checkout \n');
         setReference(new Keypair().publicKey);
@@ -116,7 +121,7 @@ export const GenerateSolPay: FC = () => {
         paymentStatus = 'pending';
         console.log("NEW URL: "+url);
         console.log("BEFORE VALIDATE");
-        setIsDone(await validatePayment(reference,paymentStatus,recipient,amount));
+        setIsDone(await validatePayment(reference,paymentStatus,recipient,amount,url));
         console.log("CALLED VALIDATE");
         if(isDone){
            console.log("DONE MF");
@@ -125,7 +130,57 @@ export const GenerateSolPay: FC = () => {
     }
     
     async function mintReceipt(){
+            //DATE INFO 
+            
+                var date = new Date().getDate(); //Current Date
+                var month = new Date().getMonth() + 1; //Current Month
+                var year = new Date().getFullYear(); //Current Year
+                var hours = new Date().getHours(); //Current Hours
+                var min = new Date().getMinutes(); //Current Minutes
+                
 
+
+            //MINT INFO
+            const reqHeader = new Headers();
+            reqHeader.append("x-client-secret", "sk_live.usVQ6eZT.OzoRV8Wl0NEBDWKk6FS6fAk69YJTgwLs");
+            reqHeader.append("x-project-id", "4b9b60b4-3958-4b21-a818-e4fa2e164f68");
+            reqHeader.append("Content-Type", "application/json");
+
+            const collectionName = "default-solana" // change if you've created a collection
+            const recipient = "solana:"+ wallet.publicKey;
+            // Or with just an email:
+            // const recipient = "email:peter@crossmint.com:polygon"
+
+            const reqBody = JSON.stringify({
+            "metadata": {
+                "name": 'SolMerchant Receipt',
+                "image":"https://shdw-drive.genesysgo.net/3z41NCLcgmQzRaCPc5TpyJcDUgetmStXHfgBVpefRr4Z/receiptSM.png",
+                "description": 'This NFT is a receipt of a transaction on SolMerchant',
+                "attributes": [
+                    {"trait_type": "Sender", value:"TBD"},
+                    {"trait_type": "Receiver", value:""+wallet.publicKey},
+                    {"trait_type": "Amount", value:""+amount},
+                    {"trait_type": "Token Type", value:"SOL"},
+                    {"trait_type": "Date", value:date + "/" + month + "/" + year 
+                    + " " + hours + ":" + min}
+                  ],
+            },
+            "recipient": recipient
+            });
+
+            var requestOptions = {
+            method: 'POST',
+            headers: reqHeader,
+            body: reqBody,
+            redirect: 'follow'
+            };
+
+            fetch(`https://www.crossmint.com/api/2022-06-09/collections/${collectionName}/nfts`, requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+
+            console.log("hopefully succesfully minted an nft");
     }
     
     

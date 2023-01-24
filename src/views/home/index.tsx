@@ -17,6 +17,7 @@ import useUserSOLBalanceStore from '../../stores/useUserSOLBalanceStore';
 
 export const HomeView: FC = ({ }) => {
   const wallet = useWallet();
+  console.log(wallet);
   const { connection } = useConnection();
 
   const balance = useUserSOLBalanceStore((s) => s.balance)
