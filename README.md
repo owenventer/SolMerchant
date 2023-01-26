@@ -6,7 +6,7 @@ to the site and generate a SolanaPay QR code of any amount that will enable anyo
 
 Live demo at: https://solmerchant.vercel.app/
 
-![demoImage](../Random%20Assets/screenshot.png)
+![demoImage](./public/screenshot.png)
 
 Built on top of the Solana-dapp scaffold from the Solana Foundation. 
 
